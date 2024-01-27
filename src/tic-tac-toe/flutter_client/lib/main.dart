@@ -1,20 +1,78 @@
 import 'package:flutter/material.dart';
 
-import 'src/app.dart';
-import 'src/settings/settings_controller.dart';
-import 'src/settings/settings_service.dart';
+void main() {
+  runApp(const TicTacToeApp());
+}
 
-void main() async {
-  // Set up the SettingsController, which will glue user settings to multiple
-  // Flutter Widgets.
-  final settingsController = SettingsController(SettingsService());
+class TicTacToeApp extends StatelessWidget {
+  const TicTacToeApp({super.key});
 
-  // Load the user's preferred theme while the splash screen is displayed.
-  // This prevents a sudden theme change when the app is first displayed.
-  await settingsController.loadSettings();
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: _TicTacToeScreen(),
+    );
+  }
+}
 
-  // Run the app and pass in the SettingsController. The app listens to the
-  // SettingsController for changes, then passes it further down to the
-  // SettingsView.
-  runApp(MyApp(settingsController: settingsController));
+class _TicTacToeScreen extends StatefulWidget {
+  const _TicTacToeScreen();
+
+  @override
+  _TicTacToeScreenState createState() => _TicTacToeScreenState();
+}
+
+class _TicTacToeScreenState extends State<_TicTacToeScreen> {
+  List<List<String>> board = List.generate(3, (_) => List.filled(3, ''));
+
+  bool isPlayerX = true; // true if it's player X's turn, false for player O
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Tic-Tac-Toe'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (int i = 0; i < 3; i++)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (int j = 0; j < 3; j++)
+                    SizedBox(
+                      width: 70,
+                      height: 70,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (board[i][j] == '') {
+                            setState(() {
+                              board[i][j] = isPlayerX ? 'X' : 'O';
+                              isPlayerX = !isPlayerX;
+                            });
+                          }
+                        },
+                        child: Text(board[i][j]),
+                      ),
+                    ),
+                ],
+              ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Reset the game
+                setState(() {
+                  board = List.generate(3, (_) => List.filled(3, ''));
+                  isPlayerX = true;
+                });
+              },
+              child: const Text('Reset Game'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
