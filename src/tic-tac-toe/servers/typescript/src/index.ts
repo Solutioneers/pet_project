@@ -4,6 +4,7 @@ import { cors } from 'hono/cors'
 import httpStatus from 'http-status'
 import GameManager from './models/GameManager'
 import { RequestError } from './utility/RequestError'
+import { validateGameStart, validateJoinGame } from './utility/helperFunctions'
 
 const app = new Hono()
 
@@ -48,23 +49,11 @@ app.post('/game/:id/join', async (c) => {
     const player = await c.req.json()
     const game = GameManager.getInstance().getGame(gameId)
 
-    console.log('game', game, gameId)
-
     if (!game) {
         throw new RequestError('Game not found', httpStatus.NOT_FOUND)
     }
 
-    if (game.players.length >= 2) {
-        throw new RequestError('Game is full.', httpStatus.BAD_REQUEST)
-    }
-
-    if (game.players.some((p) => player.symbol === p.symbol)) {
-        throw new RequestError('Symbol already taken.', httpStatus.BAD_REQUEST)
-    }
-
-    if (game.players.some((p) => player.id === p.id)) {
-        throw new RequestError('This player already joined.', httpStatus.BAD_REQUEST)
-    }
+    validateJoinGame(game, player)
 
     game.addPlayer(player)
 
@@ -83,13 +72,7 @@ app.post('/game/:id/start', (c) => {
         throw new RequestError('Game not found.', httpStatus.NOT_FOUND)
     }
 
-    if (game.players.length < 2) {
-        throw new RequestError('Game is not full.', httpStatus.BAD_REQUEST)
-    }
-
-    if (game.status === 'IN_PROGRESS') {
-        throw new RequestError('Game already started.', httpStatus.BAD_REQUEST)
-    }
+    validateGameStart(game)
 
     try {
         game.start()
