@@ -65,7 +65,7 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 - **Method**: `POST`
 - **Description**: Adds a player to a specific game by ID. The player information should be included in the request body.
 - **Request Example**:
-  ```json
+  ```
   {
     "id": "player1Id",
     "symbol": "X" | "O" // Letter O, not number zero.
@@ -88,7 +88,7 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 - **Method**: `POST`
 - **Description**: Starts a specific game and returns the game state.
 - **Response Example**:
-  ```json
+  ```
    {
      "id": "gameId",
      // Additional game state information...
@@ -102,7 +102,7 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 - **Method**: `GET`
 - **Description**: Retrieves the current state of a specified game.
 - **Response Example**:
-  ```json
+  ```
   {
     "id": "gameId",
     "board": [
@@ -126,7 +126,7 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 - **Method**: `GET`
 - **Description**: Lists all ongoing and completed games.
 - **Response Example**:
-  ```json
+  ```
   [
     {
       "id": "game1Id",
@@ -143,7 +143,7 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 
 Errors are returned in the following format:
 
-```json
+```
 {
   "error": {
     "message": string,
