@@ -11,3 +11,9 @@ export interface IGame {
     status: 'WAITING' | 'IN_PROGRESS' | 'FINISHED'
     winner: string | null
 }
+
+export interface IMove {
+    playerId: string
+    row: number
+    column: number
+}

@@ -2,16 +2,13 @@
 
 This project is a backend service for a Tic-Tac-Toe game, written in TypeScript and utilizing the Hono framework for creating serverless functions. The service is designed to manage game state and player interactions for games of Tic-Tac-Toe, making it possible for various frontends to interface with it to facilitate multiplayer gameplay.
 
-## Features (So far)
+## Features
 
 - Create new game instances
 - Join existing games
+- Make moves within a game
 - Check game state and winner
 - List all games
-
-## TODO
-
-- Make moves within a game - Logic is there, but there is no endpoint to make moves right now.
 
 ## Getting Started
 
@@ -53,7 +50,7 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 - **Method**: `POST`
 - **Description**: Creates a new game and returns the game ID.
 - **Response Example**:
-  ```json
+  ```ts
   {
     "id": "gameId",
   }
@@ -65,14 +62,14 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 - **Method**: `POST`
 - **Description**: Adds a player to a specific game by ID. The player information should be included in the request body.
 - **Request Example**:
-  ```
+  ```ts
   {
     "id": "player1Id",
     "symbol": "X" | "O" // Letter O, not number zero.
   }
   ```
 - **Response Example**:
-  ```json
+  ```ts
   {
     "id": "gameId",
     "players": [
@@ -88,11 +85,32 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 - **Method**: `POST`
 - **Description**: Starts a specific game and returns the game state.
 - **Response Example**:
-  ```
+  ```ts
    {
      "id": "gameId",
      // Additional game state information...
      "status": "IN_PROGRESS"
+   }
+  ```
+
+### Make a Move
+
+- **Endpoint**: `POST /game/:id/move`
+- **Method**: `POST`
+- **Description**: Places a symbol to the specified row and column.
+- **Request Example**:
+  ```ts
+   {
+     "playerId": "somePlayerId",
+     "row": 1,
+     "column": 2
+   }
+  ```
+- **Response Example**:
+  ```ts
+   {
+     "id": "gameId",
+     // Additional game state information...
    }
   ```
 
@@ -102,7 +120,7 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 - **Method**: `GET`
 - **Description**: Retrieves the current state of a specified game.
 - **Response Example**:
-  ```
+  ```ts
   {
     "id": "gameId",
     "board": [
@@ -126,7 +144,7 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 - **Method**: `GET`
 - **Description**: Lists all ongoing and completed games.
 - **Response Example**:
-  ```
+  ```ts
   [
     {
       "id": "game1Id",
@@ -143,7 +161,7 @@ And now when you go over to `http://localhost:8787/` you should see a "Welcome S
 
 Errors are returned in the following format:
 
-```
+```ts
 {
   "error": {
     "message": string,
@@ -177,7 +195,7 @@ To contribute to the project:
 To run tests:
 
 ```bash
-npm test
+pnpm test
 ```
 
 Ensure you write tests for any new features or bug fixes.

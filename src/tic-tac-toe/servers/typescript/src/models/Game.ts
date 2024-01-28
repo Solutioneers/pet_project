@@ -1,5 +1,3 @@
-import httpStatus from 'http-status'
-import { RequestError } from '../utility/RequestError'
 import { IGame, IPlayer } from '../utility/interfaces'
 
 export class Game implements IGame {
@@ -51,24 +49,20 @@ export class Game implements IGame {
      * @returns {void}
      */
     makeMove(playerId: string, row: number, column: number): void {
-        if (this.status !== 'IN_PROGRESS') {
-            throw new RequestError('Game is not in progress', httpStatus.BAD_REQUEST)
-        }
-
-        if (this.currentPlayer !== playerId) {
-            throw new RequestError('It is not your turn', httpStatus.BAD_REQUEST)
-        }
-
-        if (this.board[row][column] !== '') {
-            throw new RequestError('Invalid move', httpStatus.BAD_REQUEST)
-        }
-
         this.board[row][column] = this.players.find((p) => p.id === playerId)!.symbol
-        this.currentPlayer = this.players.find((p) => p.id !== playerId)!.id
+        this.nextPlayer()
     }
 
     /**
-     * Checks if there is a winner or a draw.
+     * Switches to the next player.
+     * @returns {void}
+     */
+    nextPlayer(): void {
+        this.currentPlayer = this.players.find((p) => p.id !== this.currentPlayer)!.id
+    }
+
+    /**
+     * Checks if there is a win or a draw on the board.
      * @returns {void}
      */
     checkForWinner(): void {
