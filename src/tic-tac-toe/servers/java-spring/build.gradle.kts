@@ -5,7 +5,11 @@ plugins {
 }
 
 group = "org.solutioneers"
-version = "0.1"
+version = "0.0.1"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+}
 
 repositories {
     mavenCentral()
