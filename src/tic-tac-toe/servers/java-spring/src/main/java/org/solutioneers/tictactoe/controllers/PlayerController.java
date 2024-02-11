@@ -19,14 +19,14 @@ public class PlayerController {
     ArrayList<Player> players = new ArrayList<>();
 
     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> register(@RequestBody PlayerPayload payload) {
+    public ResponseEntity<Object> register(@RequestBody PlayerPayload payload) {
         for (Player player: players) {
             if (payload.nickname().equalsIgnoreCase(player.nickname())) {
-                return ResponseEntity.badRequest().body("Nickname already exists");
+                return ResponseEntity.badRequest().body("Nickname already exists.");
             }
         }
         Player newPlayer = new Player(UUID.randomUUID().toString(), payload.nickname());
         players.add(newPlayer);
-        return new ResponseEntity<>("Nickname already exists", HttpStatus.CREATED);
+        return new ResponseEntity<>(newPlayer, HttpStatus.CREATED);
     }
 }
